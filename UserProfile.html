@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h3>
+      Welcome to diabetic helper, let's do a quick questionnaire to set up your
+      profile
+    </h3>
+    <div class="container">
+      <p id="questions"></p>
+      <input type="text" id="userQuestionaireInput" />
+      <br />
+
+      <button type="button" id="nextBtn">Next</button>
+      <p id="error"></p>
+    </div>
+  </body>
+
+  <script>
+    const userAnswerInput = document.getElementById("userQuestionaireInput");
+    const questions = document.getElementById("questions");
+    const nextBtn = document.getElementById("nextBtn");
+    const error = document.getElementById("error");
+
+    const userProfile = {
+      name: null,
+      morningDose: null,
+      afternoonDose: null,
+      eveningDose: null,
+      correctionDose: null,
+      ActivityLevel: null,
+      insulinTypeFast: null,
+      insulinTypeslow: null,
+      insulinFrequency: null,
+    };
+    const userQuestions = {
+      questions: [
+        {
+          question: "What would you like us to call you?",
+        },
+        {
+          question: "What is your insulin to carb ratio in the morning?",
+        },
+        {
+          question: "What is your insulin to carb ratio in the afternoon?",
+        },
+        {
+          question: "What is your insulin to carb ratio in the evening?",
+        },
+        {
+          question: "What is your correction dose?",
+        },
+        {
+          question:
+            "What is your current activity level? (e.g., 1-2 days a week (sedentary), 3-4 days a week (active), 4+ days a week (very active))",
+        },
+        {
+          question: "What insulin do you take for fast-acting?",
+        },
+        {
+          question: "What insulin do you take for long-acting insulin?",
+        },
+        {
+          question: "How many times a day do you take insulin?",
+        },
+      ],
+      answers: [],
+      currentQuestionIndex: 0,
+    };
+
+    console.log("userProfile object, ", userProfile.length);
+
+    function displayQuestion() {
+      if (userQuestions.currentQuestionIndex < userQuestions.questions.length) {
+        questions.textContent =
+          userQuestions.questions[userQuestions.currentQuestionIndex].question;
+      } else {
+        questions.textContent = "Questionnaire complete!";
+        nextBtn.disabled = true;
+
+        // You can now process the answers and set up the user profile.
+        // For example:
+        // const userProfile = {
+        //   name: userQuestions.answers[0],
+        //   morningDose: userQuestions.answers[1],
+        //   // ... and so on
+        // };
+      }
+    }
+
+    nextBtn.addEventListener("click", function () {
+      const answer = userAnswerInput.value;
+      if (userAnswerInput.value !== "") {
+        error.textContent = "";
+        userQuestions.answers.push(answer);
+        userAnswerInput.value = ""; // Clear the input field
+        userQuestions.currentQuestionIndex++;
+        // console.log("user Answers", userQuestions.answers);
+        displayQuestion();
+        populateUserProfile(userQuestions.answers);
+        console.log("user Answers", userQuestions.answers);
+      } else {
+        userQuestions.currentQuestionIndex;
+        error.textContent = "please answer the question";
+      }
+
+      if ((nextBtn.disabled = true && userQuestions.answers.length === 9)) {
+        window.location.href = "./LogDose.html";
+      }
+    });
+
+    // Display the first question when the page loads
+    displayQuestion();
+
+    function populateUserProfile(answers) {
+      const profileKeys = Object.keys(userProfile);
+
+      for (let i = 0; i < profileKeys.length; i++) {
+        userProfile[profileKeys[i]] = userQuestions.answers[i];
+      }
+
+      localStorage.setItem("UserProfile", JSON.stringify(userProfile));
+    }
+
+    let savedUserProfile = localStorage.getItem("userProfile") || [];
+    console.log("savedUserProfile", savedUserProfile);
+  </script>
+</html>
+
+<!-- 
+
+questions :
+
+what would you like us to call you?
+what is your insulin to carb ratio in morning?
+what is your insulin to carb ratio in afternoon?
+what is your insulin to carb ratio in evening?
+what is your correction dose?
+what is your current activity level? (eg. 1-2 days a week (sedentary), 3-4 days a week (active), 4+ day a week (active))
+what insulin do you take for fast acting?
+what insulin do you take for low acting insulin?
+how many times of insulin a day do you take?
+
+
+
+
+
+
+
+
+
+
+
+
+today:
+- rewrite object keys and values  
+- do the quiz first part and practice map 
+
+-->

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food nutrition search</title>
+  </head>
+  <body>
+    <label>foodSearch</label>
+    <input type="text" id="foodSeach" placeholder="search" />
+
+    <script>
+      require("dotenv").config({ path: "./Api.env" }); // Corrected: require("dotenv").config
+
+      //only take
+      /*
+     res.descrption, res.labelNutrients => carbs  sugars,protein, calories, serving size 
+     res.foodPortions
+
+        */
+      //makesure to gitignore
+      const api = process.env.API_KEY;
+
+      console.log("api", api);
+    </script>
+  </body>
+</html>
