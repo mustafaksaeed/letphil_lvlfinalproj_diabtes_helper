@@ -81,14 +81,6 @@
       } else {
         questions.textContent = "Questionnaire complete!";
         nextBtn.disabled = true;
-
-        // You can now process the answers and set up the user profile.
-        // For example:
-        // const userProfile = {
-        //   name: userQuestions.answers[0],
-        //   morningDose: userQuestions.answers[1],
-        //   // ... and so on
-        // };
       }
     }
 
@@ -97,7 +89,7 @@
       if (userAnswerInput.value !== "") {
         error.textContent = "";
         userQuestions.answers.push(answer);
-        userAnswerInput.value = ""; // Clear the input field
+        userAnswerInput.value = "";
         userQuestions.currentQuestionIndex++;
         // console.log("user Answers", userQuestions.answers);
         displayQuestion();
@@ -160,4 +152,7 @@ today:
 - rewrite object keys and values  
 - do the quiz first part and practice map 
 
+
+lowercase file naming
+store user photo
 -->

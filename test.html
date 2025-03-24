@@ -1,26 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <input type="text" ids="seachInput">
-    <script>
-    
+  </head>
+  <body>
+    <input type="text" id="searchInput" />
+    <div id="results"></div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./test.js"></script>
+  </body>
+  <script>
+    const foodInput = document.getElementById("searchInput");
+    const resultsDiv = document.getElementById("results");
 
-    async function getFood(){
+    async function fetchData() {
+      try {
+        const food = foodInput.value.trim();
 
-        axios
-        .get()
+        const apiKey = "PKukaoIj0EkAALXfan9OXgKGpXNwcXKazqVKSoci";
+        const apiUrl = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${food}`;
+
+        const response = await axios.get(
+          "https://world.openfoodfacts.org/api/v2/search"
+        );
+
+        for (let i = 0; i < response.data.foods.length; i++) {
+          const current = response.data.foods[i];
+
+          console.log("current =", current);
+
+          const desc = current.description;
+          const carbs = current.foodNutrients.find(
+            (fn) => fn.nutrientName === "Carbohydrate, by difference"
+          );
+
+          const div = document.createElement("div");
+          div.append(desc + " " + JSON.stringify(carbs));
+
+          resultsDiv.appendChild(div);
+        }
+
+        console.log(response.data);
+        // displayResults(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
+      }
     }
-    </script>
-</body>
 
+    function displayResults(data) {
+      resultsDiv.innerHTML = JSON.stringify(data, null, 2);
+    }
+
+    foodInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        fetchData();
+      }
+    });
+
+    // make prettier and connect everything
+    //globals.js
+  </script>
 </html>
 
+<!-- 
 
+      const findDuplicates = (arr) => {
+      let sorted_arr = arr.slice().sort(); // You can define the comparing function here.
+      // JS by default uses a crappy string compare.
+      // (we use slice to clone the array so the
+      // original array won't be modified)
+      let results = [];
+      for (let i = 0; i < sorted_arr.length - 1; i++) {
+        if (sorted_arr[i + 1] == sorted_arr[i]) {
+          results.push(sorted_arr[i]);
+        }
+      }
+      return results;
+    }
 
-
-
+    remove duplicates, put in readable cards with check list
+-->

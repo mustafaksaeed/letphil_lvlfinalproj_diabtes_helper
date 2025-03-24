@@ -7,7 +7,7 @@ A project aimed to helped diabetics log carbs and count carbs, insulin correctio
 
       //only take
       /*
-     res.descrption, res.labelNutrients => carbs  sugars,protein, calories, serving size 
+     res.description, res.labelNutrients => carbs  sugars,protein, calories, serving size 
      res.foodPortions
 
         */
