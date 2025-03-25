@@ -3,83 +3,145 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Food Search</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      #searchInput,
+      #foodCategory {
+        width: 300px;
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      #results {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(200px, 1fr)
+        ); /* Responsive grid */
+        gap: 10px;
+      }
+      .result-item {
+        border: 1px solid #ddd;
+        padding: 10px;
+        display: grid;
+        grid-template-rows: repeat(5, auto); /* 5 rows */
+        gap: 5px;
+      }
+    </style>
   </head>
   <body>
-    <input type="text" id="searchInput" />
+    <input type="text" id="searchInput" placeholder="Enter food name" />
+    <input
+      type="text"
+      id="foodCategory"
+      placeholder="Enter food category (optional)"
+    />
     <div id="results"></div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./test.js"></script>
-  </body>
-  <script>
-    const foodInput = document.getElementById("searchInput");
-    const resultsDiv = document.getElementById("results");
+    <script>
+      const foodInput = document.getElementById("searchInput");
+      const foodCategoryInput = document.getElementById("foodCategory");
+      const resultsDiv = document.getElementById("results");
 
-    async function fetchData() {
-      try {
-        const food = foodInput.value.trim();
+      async function fetchData() {
+        try {
+          const food = foodInput.value.trim();
+          const category = foodCategoryInput.value.trim();
 
-        const apiKey = "PKukaoIj0EkAALXfan9OXgKGpXNwcXKazqVKSoci";
-        const apiUrl = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${food}`;
+          const apiKey = "PKukaoIj0EkAALXfan9OXgKGpXNwcXKazqVKSoci";
+          let apiUrl = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${food}`;
 
-        const response = await axios.get(
-          "https://world.openfoodfacts.org/api/v2/search"
-        );
+          const response = await axios.get(apiUrl);
 
-        for (let i = 0; i < response.data.foods.length; i++) {
-          const current = response.data.foods[i];
+          if (
+            response.data &&
+            response.data.foods &&
+            response.data.foods.length > 0
+          ) {
+            displayResults(response.data.foods);
+          } else {
+            resultsDiv.innerHTML = "<p>No results found.</p>";
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
+        }
+      }
 
-          console.log("current =", current);
+      function displayResults(foods) {
+        resultsDiv.innerHTML = "";
 
-          const desc = current.description;
-          const carbs = current.foodNutrients.find(
-            (fn) => fn.nutrientName === "Carbohydrate, by difference"
-          );
+        foods.forEach((foodItem) => {
+          const desc = foodItem.description || "Description not available";
+
+          //   const carbs = foodItem.foodNutrients?.find(
+          //     (fn) => fn.nutrientName === "Carbohydrate, by difference"
+          //   );
+          //   const protein = foodItem.foodNutrients?.find(
+          //     (fn) => fn.nutrientName === "Protein"
+          //   );
+          //   const calories = foodItem.foodNutrients?.find(
+          //     (fn) => fn.nutrientName === "Energy"
+          //   );
+          //   const sugars = foodItem.foodNutrients?.find(
+          //     (fn) => fn.nutrientName === "Total Sugars"
+          //   );
+          //   const fiber = foodItem.foodNutrients?.find(
+          //     (fn) => fn.nutrientName === "Fiber, total dietary"
+          //   );
+
+          const portion =
+            foodItem.foodMeasures && foodItem.foodMeasures.length > 0
+              ? foodItem.foodMeasures[0].disseminationText
+              : "Portion info not available";
+          const portionWeight =
+            foodItem.foodMeasures && foodItem.foodMeasures.length > 0
+              ? foodItem.foodMeasures[0].gramWeight
+              : "Weight info not available";
 
           const div = document.createElement("div");
-          div.append(desc + " " + JSON.stringify(carbs));
-
+          div.classList.add("result-item");
+          div.innerHTML = `
+                    <p><strong>Description:</strong> ${desc}</p>
+                    <input type="checkbox" />`;
           resultsDiv.appendChild(div);
+
+          //here the for each gets each item and creates div, and shows it
+        });
+      }
+
+      foodInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          fetchData();
         }
-
-        console.log(response.data);
-        // displayResults(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
-      }
-    }
-
-    function displayResults(data) {
-      resultsDiv.innerHTML = JSON.stringify(data, null, 2);
-    }
-
-    foodInput.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        fetchData();
-      }
-    });
-
-    // make prettier and connect everything
-    //globals.js
-  </script>
+      });
+    </script>
+  </body>
 </html>
 
 <!-- 
 
-      const findDuplicates = (arr) => {
-      let sorted_arr = arr.slice().sort(); // You can define the comparing function here.
-      // JS by default uses a crappy string compare.
-      // (we use slice to clone the array so the
-      // original array won't be modified)
-      let results = [];
-      for (let i = 0; i < sorted_arr.length - 1; i++) {
-        if (sorted_arr[i + 1] == sorted_arr[i]) {
-          results.push(sorted_arr[i]);
-        }
-      }
-      return results;
-    }
+only show title, when clicked open modal pop up with side corner check box 
 
-    remove duplicates, put in readable cards with check list
+
+when modal is closed a shopping cart with the number of items is shown 
+when modal is open the nutrient info is chosen 
+modal can be opened in shopping cart but position is moved to right
+
+user is then shown a box where it says calculate insulin 
+when user hasnt put a logged dose, user is prompted to log a doze 
+then if user logged dose && selected calciulate insulin it shows logged insulin taken 
+
+also save in local storage previous meals 
+user also has option to save the meal to saved meals 
+
+
+
+today rewrite code and no more vibe coding 
+
+
 -->
