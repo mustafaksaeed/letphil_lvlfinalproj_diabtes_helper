@@ -63,16 +63,11 @@
   </head>
   <body>
     <input type="text" id="searchInput" placeholder="Enter food name" />
-    <input
-      type="text"
-      id="foodCategory"
-      placeholder="Enter food category (optional)"
-    />
+
     <div id="results"></div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       const foodInput = document.getElementById("searchInput");
-      const foodCategoryInput = document.getElementById("foodCategory");
       const resultsDiv = document.getElementById("results");
 
       async function fetchData() {
@@ -113,7 +108,7 @@
           resultsDiv.appendChild(div);
 
           div.addEventListener("click", function () {
-            divInfo(foodItem); // Corrected: pass foodItem
+            divInfo(foodItem); 
           });
         });
       }
