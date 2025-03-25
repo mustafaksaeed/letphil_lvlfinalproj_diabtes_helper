@@ -18,18 +18,46 @@
       #results {
         margin-top: 20px;
         display: grid;
-        grid-template-columns: repeat(
-          auto-fit,
-          minmax(200px, 1fr)
-        ); /* Responsive grid */
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 10px;
       }
       .result-item {
         border: 1px solid #ddd;
         padding: 10px;
         display: grid;
-        grid-template-rows: repeat(5, auto); /* 5 rows */
+        grid-template-rows: repeat(5, auto);
         gap: 5px;
+        cursor: pointer;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -78,39 +106,72 @@
         foods.forEach((foodItem) => {
           const desc = foodItem.description || "Description not available";
 
-          //   const carbs = foodItem.foodNutrients?.find(
-          //     (fn) => fn.nutrientName === "Carbohydrate, by difference"
-          //   );
-          //   const protein = foodItem.foodNutrients?.find(
-          //     (fn) => fn.nutrientName === "Protein"
-          //   );
-          //   const calories = foodItem.foodNutrients?.find(
-          //     (fn) => fn.nutrientName === "Energy"
-          //   );
-          //   const sugars = foodItem.foodNutrients?.find(
-          //     (fn) => fn.nutrientName === "Total Sugars"
-          //   );
-          //   const fiber = foodItem.foodNutrients?.find(
-          //     (fn) => fn.nutrientName === "Fiber, total dietary"
-          //   );
-
-          const portion =
-            foodItem.foodMeasures && foodItem.foodMeasures.length > 0
-              ? foodItem.foodMeasures[0].disseminationText
-              : "Portion info not available";
-          const portionWeight =
-            foodItem.foodMeasures && foodItem.foodMeasures.length > 0
-              ? foodItem.foodMeasures[0].gramWeight
-              : "Weight info not available";
-
           const div = document.createElement("div");
           div.classList.add("result-item");
-          div.innerHTML = `
-                    <p><strong>Description:</strong> ${desc}</p>
-                    <input type="checkbox" />`;
+          div.innerHTML = `<p><strong></strong> ${desc}</p>`;
+
           resultsDiv.appendChild(div);
 
-          //here the for each gets each item and creates div, and shows it
+          div.addEventListener("click", function () {
+            divInfo(foodItem); // Corrected: pass foodItem
+          });
+        });
+      }
+
+      function divInfo(foodItem) {
+        const carbs = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Carbohydrate, by difference"
+        );
+        const protein = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Protein"
+        );
+        const calories = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Energy"
+        );
+        const sugars = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Total Sugars"
+        );
+        const fiber = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Fiber, total dietary"
+        );
+
+        const modal = document.createElement("div");
+        modal.classList.add("modal");
+
+        const foodItemArray = [carbs, protein, calories, sugars, fiber];
+
+        const dispayArray = foodItemArray.map((info) => {
+          return;
+          `   <div class="modal-content">
+            <p> ${info?.value || "N/A"}  </p>
+            </div>
+            `;
+        });
+        modal.innerHTML = `
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Carbs: ${carbs?.value || "N/A"}</p>
+            <p>Protein: ${protein?.value || "N/A"}</p>
+            <p>Calories: ${calories?.value || "N/A"}</p>
+            <p>Sugars: ${sugars?.value || "N/A"}</p>
+            <p>Fiber: ${fiber?.value || "N/A"}</p>
+            <input type="checkbox" />
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+        modal.style.display = "block";
+
+        modal.querySelector(".close").addEventListener("click", function () {
+          modal.style.display = "none";
+          modal.remove();
+        });
+
+        window.addEventListener("click", function (event) {
+          if (event.target === modal) {
+            modal.style.display = "none";
+            modal.remove();
+          }
         });
       }
 
@@ -119,10 +180,14 @@
           fetchData();
         }
       });
+      foodCategoryInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          fetchData();
+        }
+      });
     </script>
   </body>
 </html>
-
 <!-- 
 
 only show title, when clicked open modal pop up with side corner check box 
