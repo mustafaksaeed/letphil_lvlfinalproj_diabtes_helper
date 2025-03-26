@@ -80,16 +80,12 @@
           let apiUrl = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${food}`;
 
           const response = await axios.get(apiUrl);
-
-          if (
-            response.data &&
-            response.data.foods &&
-            response.data.foods.length > 0
-          ) {
-            displayResults(response.data.foods);
-          } else {
-            resultsDiv.innerHTML = "<p>No results found.</p>";
-          }
+          console.log(response.data.foods);
+          //   if (response.data.foods.length > 0) {
+          //     displayResults(response.data.foods);
+          //   } else {
+          //     resultsDiv.innerHTML = "<p>No results found.</p>";
+          //   }
         } catch (error) {
           console.error("Error fetching data:", error);
           resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
@@ -136,6 +132,16 @@
 
         const foodItemArray = [carbs, protein, calories, sugars, fiber];
 
+        function saveItems() {
+          let savedFoods = [];
+          let savedf = [carbs, fiber];
+          for (let i = 0; i < savedf.length; i++) {
+            savedFoods.push(savedf[i]?.value || "N/A");
+          }
+
+          console.log("savedFoods", savedFoods);
+        }
+
         const dispayArray = foodItemArray.map((info) => {
           return;
           `   <div class="modal-content">
@@ -146,11 +152,11 @@
         modal.innerHTML = `
           <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Carbs: ${carbs?.value || "N/A"}</p>
-            <p>Protein: ${protein?.value || "N/A"}</p>
-            <p>Calories: ${calories?.value || "N/A"}</p>
-            <p>Sugars: ${sugars?.value || "N/A"}</p>
-            <p>Fiber: ${fiber?.value || "N/A"}</p>
+            <p>Carbs: ${carbs.value || "N/A"}</p>
+            <p>Protein: ${protein.value || "N/A"}</p>
+            <p>Calories: ${calories.value || "N/A"}</p>
+            <p>Sugars: ${sugars.value || "N/A"}</p>
+            <p>Fiber: ${fiber.value || "N/A"}</p>
             <button style="border: 0px;" id="list">
              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="grey" class="bi bi-plus-square" viewBox="0 0 16 16">
               <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
@@ -165,21 +171,13 @@
 
         modal.querySelector(".close").addEventListener("click", function () {
           modal.style.display = "none";
-          modal.remove();
         });
 
-        document.body.appendChild(modal);
-        modal.style.display = "block";
+        document.getElementById("list").addEventListener("click", saveItems);
 
-        document.getElementById("list").addEventListener("click", saveItems); // Add event listener here
-
-        function saveItems() {
-          console.log("click");
-        }
-        window.addEventListener("click", function (event) {
+        modal.addEventListener("click", function (event) {
           if (event.target === modal) {
             modal.style.display = "none";
-            modal.remove();
           }
         });
       }
@@ -189,6 +187,8 @@
           fetchData();
         }
       });
+
+      //push values to an array
     </script>
   </body>
 </html>
@@ -223,5 +223,7 @@ today rewrite code and no more vibe coding
 
 
 - for history a separate array i think idk
+
+
 
 -->

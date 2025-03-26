@@ -3,7 +3,247 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FoodSearch</title>
+    <title>Food Search</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      #searchInput,
+      #foodCategory {
+        width: 300px;
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      #results {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+      }
+      .result-item {
+        border: 1px solid #ddd;
+        padding: 10px;
+        display: grid;
+        grid-template-rows: repeat(5, auto);
+        gap: 5px;
+        cursor: pointer;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <label>Search foods</label>
+    <input type="text" id="searchInput" placeholder="Enter food name" />
+
+    <div id="results"></div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const foodInput = document.getElementById("searchInput");
+      const foodCategoryInput = document.getElementById("foodCategory");
+      const resultsDiv = document.getElementById("results");
+
+      async function fetchData() {
+        try {
+          const food = foodInput.value.toLowerCase().trim();
+
+          const apiKey = "PKukaoIj0EkAALXfan9OXgKGpXNwcXKazqVKSoci";
+          let apiUrl = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${food}`;
+
+          const response = await axios.get(apiUrl);
+          const current = response.data.foods;
+          let firstValue = "";
+          for (let i = 0; i < current.length; i++) {
+            const desc = current[i].description.toLowerCase();
+
+            let b = desc.split(" ");
+
+            for (let i = 0; i < b[0].length; i++) {
+              const arrayFirst = b[0];
+              if (arrayFirst[arrayFirst.length - 1] === " ") {
+                firstValue = arrayFirst;
+              } else {
+                firstValue = arrayFirst.slice(0, -1);
+              }
+            }
+
+            console.log(firstValue);
+          }
+
+          if (firstValue === input) {
+            displayResults();
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
+        }
+      }
+
+      //here only desplays title only sbow if its exactly equal to the input
+      function displayResults(foods) {
+        resultsDiv.innerHTML = "";
+
+        foods.forEach((foodinput) => {
+          const desc =
+            foodItem.description.toLowerCase() || "Description not available";
+
+          const div = document.createElement("div");
+          div.classList.add("result-item");
+          div.innerHTML = `<p><strong></strong> ${desc}</p>`;
+
+          resultsDiv.appendChild(div);
+
+          div.addEventListener("click", function () {
+            divInfo(foodItem);
+          });
+        });
+      }
+
+      function divInfo(foodItem) {
+        const carbs = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Carbohydrate, by difference"
+        );
+        const protein = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Protein"
+        );
+        const calories = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Energy"
+        );
+        const sugars = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Total Sugars"
+        );
+        const fiber = foodItem.foodNutrients?.find(
+          (fn) => fn.nutrientName === "Fiber, total dietary"
+        );
+
+        const modal = document.createElement("div");
+        modal.classList.add("modal");
+
+        const foodItemArray = [carbs, protein, calories, sugars, fiber];
+
+        function saveItems() {
+          let savedFoods = [];
+          let savedf = [carbs, fiber];
+          for (let i = 0; i < savedf.length; i++) {
+            savedFoods.push(savedf[i]?.value || "N/A");
+          }
+
+          console.log("savedFoods", savedFoods);
+        }
+
+        const dispayArray = foodItemArray.map((info) => {
+          return;
+          `   <div class="modal-content">
+            <p> ${info?.value || "N/A"}  </p>
+            </div>
+            `;
+        });
+        modal.innerHTML = `
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Carbs: ${carbs.value || "N/A"}</p>
+            <p>Protein: ${protein.value || "N/A"}</p>
+            <p>Calories: ${calories.value || "N/A"}</p>
+            <p>Sugars: ${sugars?.value || "N/A"}</p>
+            <p>Fiber: ${fiber?.value || "N/A"}</p>
+            <button style="border: 0px;" id="list">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="grey" class="bi bi-plus-square" viewBox="0 0 16 16">
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+             </svg>
+           </button>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+        modal.style.display = "block";
+
+        modal.querySelector(".close").addEventListener("click", function () {
+          modal.style.display = "none";
+        });
+
+        document.getElementById("list").addEventListener("click", saveItems);
+
+        modal.addEventListener("click", function (event) {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        });
+      }
+
+      foodInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          fetchData();
+        }
+      });
+
+      //push values to an array
+    </script>
+  </body>
 </html>
+<!-- 
+
+only show title, when clicked open modal pop up with side corner check box 
+
+
+when modal is closed a shopping cart with the number of items is shown 
+when modal is open the nutrient info is chosen 
+modal can be opened in shopping cart but position is moved to right
+
+user is then shown a box where it says calculate insulin 
+when user hasnt put a logged dose, user is prompted to log a doze 
+then if user logged dose && selected calciulate insulin it shows logged insulin taken 
+
+also save in local storage previous meals 
+user also has option to save the meal to saved meals 
+
+
+
+today rewrite code and no more vibe coding 
+
+
+
+
+
+
+- for saving food push data into an array and fetch i think when user save 
+- for remove, remove form that array 
+- similar to editing 
+
+
+- for history a separate array i think idk
+
+
+problem 
+- i wnat the inpiut to only show values in desc first value in the array 
+- how? definetly before re-rendering idk
+-->
