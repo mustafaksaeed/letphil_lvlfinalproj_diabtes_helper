@@ -82,26 +82,28 @@
           const response = await axios.get(apiUrl);
           const current = response.data.foods;
           let firstValue = "";
-          for (let i = 0; i < current.length; i++) {
-            const desc = current[i].description.toLowerCase();
+          // for (let i = 0; i < current.length; i++) {
+          //   const desc = current[i].description.toLowerCase();
 
-            let b = desc.split(" ");
+          //   let b = desc.split(" ");
 
-            for (let i = 0; i < b[0].length; i++) {
-              const arrayFirst = b[0];
-              if (arrayFirst[arrayFirst.length - 1] === " ") {
-                firstValue = arrayFirst;
-              } else {
-                firstValue = arrayFirst.slice(0, -1);
-              }
+          //   // for (let i = 0; i < b[0].length; i++) {
+          //   //   const arrayFirst = b[0];
+          //   //   if (typeof arrayFirst[arrayFirst.length - 1] === "string") {
+          //   //     firstValue = arrayFirst;
+          //   //   } else {
+          //   //     firstValue = arrayFirst.slice(0, -1);
+          //   //   }
+
+            // makke this a function
             }
 
             console.log(firstValue);
           }
 
-          if (firstValue === input) {
-            displayResults();
-          }
+          // if (firstValue === input) {
+          //   displayResults();
+          // }
         } catch (error) {
           console.error("Error fetching data:", error);
           resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
@@ -246,6 +248,7 @@ today rewrite code and no more vibe coding
 problem 
 - i wnat the inpiut to only show values in desc first value in the array 
 - how? definetly before re-rendering idk
+- forget for loop and functions , lets try to use filtering 
 
 
 
