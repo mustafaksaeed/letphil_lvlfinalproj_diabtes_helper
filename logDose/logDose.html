@@ -9,6 +9,21 @@
     <h1>Log dose</h1>
     <label></label>
   </body>
+  <style>
+    div {
+      display: grid;
+      grid-auto-rows: auto;
+    }
+
+    input,
+    button {
+      margin-bottom: 5px;
+    }
+    input {
+      padding: 10px;
+      margin-top: 5px;
+    }
+  </style>
   <script>
     let savedUserProfile = localStorage.getItem("UserProfile");
     console.log("savedUserProfile", savedUserProfile);
@@ -18,27 +33,31 @@
     //saved insulin frequency
 
     let insulinFreq = parseObject.insulinFrequency;
-
+    console.log(insulinFreq, "insulinFreq");
     const div = document.createElement("div");
-    const input = document.createElement("input");
-    input.classList.add("inputLog");
-    const button = document.createElement("button");
-    button.textContent = "+";
-    div.appendChild(input);
-    div.appendChild(button);
-
     document.body.appendChild(div);
-
-    button.addEventListener("click", function () {
-      // const newButton = document.createElement("button");
-      // const newInput = document.createElement("input");
-      // div.appendChild(newButton);
-      // div.appendChild(newInput);
+    let count = 0;
+    function createInputAndButton() {
+      const input = document.createElement("input");
+      const button = document.createElement("button");
+      button.textContent = "+";
 
       div.appendChild(input);
       div.appendChild(button);
-    });
 
+      button.addEventListener("click", () => {
+        count++;
+        console.log("count", count++);
+
+        if (count === insulinFreq) {
+          createInputAndButton();
+        } else {
+          
+        }
+      });
+    }
+
+    createInputAndButton();
     /*
         - each time user clicks the add button a new input is created
         -  user can only input the amount of inputs equal to how much times they take insulin
