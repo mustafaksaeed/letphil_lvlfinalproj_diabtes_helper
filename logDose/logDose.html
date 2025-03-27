@@ -7,9 +7,46 @@
   </head>
   <body>
     <h1>Log dose</h1>
+    <label></label>
   </body>
   <script>
     let savedUserProfile = localStorage.getItem("UserProfile");
     console.log("savedUserProfile", savedUserProfile);
+
+    let parseObject = JSON.parse(savedUserProfile);
+    console.log(" parseObject", parseObject);
+    //saved insulin frequency
+
+    let insulinFreq = parseObject.insulinFrequency;
+
+    const div = document.createElement("div");
+    const input = document.createElement("input");
+    input.classList.add("inputLog");
+    const button = document.createElement("button");
+    button.textContent = "+";
+    div.appendChild(input);
+    div.appendChild(button);
+
+    document.body.appendChild(div);
+
+    button.addEventListener("click", function () {
+      // const newButton = document.createElement("button");
+      // const newInput = document.createElement("input");
+      // div.appendChild(newButton);
+      // div.appendChild(newInput);
+
+      div.appendChild(input);
+      div.appendChild(button);
+    });
+
+    /*
+        - each time user clicks the add button a new input is created
+        -  user can only input the amount of inputs equal to how much times they take insulin
+        -  if extra prompt user would you like to log extra doses if yes? log if no keep as is
+        - as long as input doses is equal to number of doses then add to chart
+
+
+
+            */
   </script>
 </html>

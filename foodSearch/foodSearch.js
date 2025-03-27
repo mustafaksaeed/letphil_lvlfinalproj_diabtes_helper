@@ -11,6 +11,12 @@ async function fetchData() {
 
     const response = await axios.get(apiUrl);
     const current = response.data.foods;
+
+    if (current.length > 0) {
+      displayResults(current);
+    } else {
+      resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
     resultsDiv.innerHTML = "<p>An error occurred. Please try again.</p>";
