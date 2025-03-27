@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Search</title>
+    <link rel="stylesheet" href="foodSearch.css" />
+  </head>
+  <body>
+    <label>Search foods</label>
+    <input type="text" id="searchInput" placeholder="Enter food name" />
+
+    <div id="results"></div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./foodSearch.js"></script>
+  </body>
+</html>
+<!-- 
+
+only show title, when clicked open modal pop up with side corner check box 
+
+
+when modal is closed a shopping cart with the number of items is shown 
+when modal is open the nutrient info is chosen 
+modal can be opened in shopping cart but position is moved to right
+
+user is then shown a box where it says calculate insulin 
+when user hasnt put a logged dose, user is prompted to log a doze 
+then if user logged dose && selected calciulate insulin it shows logged insulin taken 
+
+also save in local storage previous meals 
+user also has option to save the meal to saved meals 
+
+
+
+today rewrite code and no more vibe coding 
+
+
+
+
+
+
+- for saving food push data into an array and fetch i think when user save 
+- for remove, remove form that array 
+- similar to editing 
+
+
+- for history a separate array i think idk
+
+
+problem 
+- i wnat the inpiut to only show values in desc first value in the array 
+- how? definetly before re-rendering idk
+- forget for loop and functions , lets try to use filtering 
+-rewrite the divInfo function
+
+
+
+
+
+
+current[array] = [with lowercase];
+const firstWord = current.filter(getFirstValue);
+
+function checkAdult() {
+  //check if it equals the inputValue 
+}
+
+
+
+
+
+-->
