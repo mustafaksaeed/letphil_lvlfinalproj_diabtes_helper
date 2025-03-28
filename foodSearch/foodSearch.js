@@ -11,7 +11,7 @@ async function fetchData() {
 
     const response = await axios.get(apiUrl);
     const current = response.data.foods;
-
+    console.log(current);
     if (current.length > 0) {
       displayResults(current);
     } else {
@@ -29,10 +29,11 @@ function displayResults(foods) {
   foods.forEach((foodItem) => {
     const desc =
       foodItem.description.toLowerCase() || "Description not available";
-
+    const brand = foodItem.brandOwner || "Brand not available";
     const div = document.createElement("div");
     div.classList.add("result-item");
-    div.innerHTML = `<p><strong></strong> ${desc}</p>`;
+    div.innerHTML = `<p><strong></strong> ${desc}</p>
+    <p><strong></strong> ${brand}</p>`;
 
     resultsDiv.appendChild(div);
 
