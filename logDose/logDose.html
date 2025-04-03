@@ -44,33 +44,53 @@
 
 
    
-
+let insulinLog = []
     let count = 0;
 
     function createInputAndButton() {
       const input = document.createElement("input");
       const button = document.createElement("button");
+      const error =  document.createElement("p");
       button.textContent = "+";
 
       div.appendChild(input);
       div.appendChild(button);
+  div.appendChild(error)
+      button.addEventListener("click", function(){
+        if(input.value === ""){
+    error.textContent = "invalid input"
+        }else{
+          insulinLog.push(input.value)
+            error.textContent = ""
 
+console.log("insulinArray", insulinLog)
+        }
+       
+      })
 
 
       button.addEventListener("click", () => {
   
         console.log("count", count);
-        count++
+       //loop through each array value if its equal
+        if(input.value !== ""){
+          count++
+        }
+
 console.log("insulinFreq", insulinFreq)
-    
+
+
        
     if (count === Number(insulinFreq)) {
       console.log("stoppppp")
       modal.style.display = "block";
-    } else { 
+  } else if(count !== Number(insulinFreq) && modal.style.display === "none" && input.value !== ""){ 
       createInputAndButton();
       console.log("continue")
     }
+
+
+
   });
      
     }
@@ -93,9 +113,35 @@ console.log("insulinFreq", insulinFreq)
   
   modal.innerHTML = `
  <p> would you like to add more additional doses </p>
- <button>Yes</button>
-  <button>No</button>
+ <button onclick=logYes()>Yes</button>
+  <button onclick=logNo()>No</button>
  ` 
+
+
+ //also take into account handling errors 
+ function logYes(count, insulinFreq, input){
+ count++ 
+
+ if(count => insulinFreq && input.value !== ""){
+  createInputAndButton();
+  modal.style.display = "block"
+ }else{
+  logNo()
+ }
+
+ }
+
+ function logNo(){
+console.log("click")
+
+modal.style.display = "none"
+//if no dissapear 
+//push to array
+//if user clicks plus button it pushes to array 
+
+ }
+
+
 //add addtional input , and take out 
 
     //modal opens for error 
@@ -122,6 +168,31 @@ modal.querySelector(".close").addEventListener("click", function () {
       modal.style.display = "none";
     }
   });
+
+
+
+
+
+
+
+
+
+
+  new ideas 
+  when user inputs a log 
+  it switches from morning, evening, afternoon log 
+  and extra 
+
+
+  //save doeses ans map them with time stamp 
+  // then use chart maker 
+  //css loader too 
+  //food search clear each search 
+
+  thats it tonight 
+
+  for css
+  // fix log doses and food search 
   
             */
   </script>

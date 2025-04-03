@@ -29,7 +29,7 @@ function displayResults(foods) {
   foods.forEach((foodItem) => {
     const desc =
       foodItem.description.toLowerCase() || "Description not available";
-    const brand = foodItem.brandOwner || "Brand not available";
+    const brand = foodItem.brandOwner || "";
     const div = document.createElement("div");
     div.classList.add("result-item");
     div.innerHTML = `<p><strong></strong> ${desc}</p>
@@ -118,5 +118,11 @@ function divInfo(foodItem) {
 foodInput.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
     fetchData();
+
+    if (resultsDiv.innerHtml !== "") {
+      resultsDiv.innerHtml !== "";
+    } else {
+      fetchData();
+    }
   }
 });
